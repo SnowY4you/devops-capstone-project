@@ -1,6 +1,7 @@
 """
 Test Factory to make fake objects for testing
 """
+
 from datetime import date
 import factory
 from factory.fuzzy import FuzzyDate
@@ -13,6 +14,7 @@ class AccountFactory(factory.Factory):
     # pylint: disable=too-few-public-methods
     class Meta:
         """Persistent class for factory"""
+
         model = Account
 
     id = factory.Sequence(lambda n: n)

@@ -1,6 +1,7 @@
 """
 CLI Command Extensions for Flask
 """
+
 import os
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
@@ -14,7 +15,7 @@ class TestFlaskCLI(TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    @patch('service.common.cli_commands.db')
+    @patch("service.common.cli_commands.db")
     def test_db_create(self, db_mock):
         """It should call the db-create command"""
         db_mock.return_value = MagicMock()
