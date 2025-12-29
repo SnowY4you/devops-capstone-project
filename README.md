@@ -2,7 +2,9 @@
 
 This is the last capstone project to complete the IBM DevOps and Software Engineering Professional Certificate.
 
-![Build Status](https://github.com/DITT_ANVÄNDARNAMN/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
+https://www.coursera.org/specializations/devops-and-software-engineering
+
+![Build Status](https://github.com/SnowY4you/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
 
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
