@@ -5,7 +5,6 @@ See RFC 2616 and RFC 6585.
 RFC 2616: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 RFC 6585: http://tools.ietf.org/html/rfc6585
 """
-
 # Informational - 1xx
 HTTP_100_CONTINUE = 100
 HTTP_101_SWITCHING_PROTOCOLS = 101

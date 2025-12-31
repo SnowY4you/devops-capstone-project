@@ -20,7 +20,13 @@ class DataValidationError(Exception):
 
 def init_db(app):
     """Initialize the SQLAlchemy app"""
-    Account.init_db(app)
+    # Kolla om 'sqlalchemy' redan finns i appens extensions
+    if "sqlalchemy" not in app.extensions:
+        db.init_app(app)
+        app.app_context().push()
+        db.create_all()
+    else:
+        logger.info("SQLAlchemy already initialized, skipping...")
 
 
 ######################################################################
@@ -33,48 +39,37 @@ class PersistentBase:
         self.id = None  # pylint: disable=invalid-name
 
     def create(self):
-        """
-        Creates a Account to the database
-        """
+        """Creates a Account to the database"""
+        # pylint: disable=maybe-no-member
         logger.info("Creating %s", self.name)
         self.id = None  # id must be none to generate next primary key
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """
-        Updates a Account to the database
-        """
+        """Updates a Account to the database"""
+        # pylint: disable=maybe-no-member
         logger.info("Updating %s", self.name)
         db.session.commit()
 
     def delete(self):
         """Removes a Account from the data store"""
+        # pylint: disable=maybe-no-member
         logger.info("Deleting %s", self.name)
         db.session.delete(self)
         db.session.commit()
 
     @classmethod
-    def init_db(cls, app):
-        """Initializes the database session"""
-        logger.info("Initializing database")
-        cls.app = app
-        # This is where we initialize SQLAlchemy from the Flask app
-        db.init_app(app)
-        app.app_context().push()
-        db.create_all()  # make our sqlalchemy tables
-
-    @classmethod
     def all(cls):
         """Returns all of the records in the database"""
         logger.info("Processing all records")
-        return cls.query.all()
+        return cls.query.all()  # pylint: disable=no-member
 
     @classmethod
     def find(cls, by_id):
         """Finds a record by it's ID"""
         logger.info("Processing lookup for id %s ...", by_id)
-        return cls.query.get(by_id)
+        return cls.query.get(by_id)  # pylint: disable=no-member
 
 
 ######################################################################

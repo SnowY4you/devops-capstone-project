@@ -5,20 +5,22 @@ Test cases can be run with the following:
   nosetests -v --with-spec --spec-color
   coverage report -m
 """
+
 import os
 import logging
 from unittest import TestCase
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
-from service.models import db, Account, init_db
-from service.routes import app, talisman
+from service.models import db, Account
+from service import app, talisman
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
 BASE_URL = "/accounts"
-HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
+HTTPS_ENVIRON = {"wsgi.url_scheme": "https"}
+
 
 ######################################################################
 #  T E S T   C A S E S
@@ -33,7 +35,12 @@ class TestAccountService(TestCase):
         app.config["DEBUG"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
-        init_db(app)
+
+        # TA BORT: init_db(app)
+        # ERSÄTT MED:
+        with app.app_context():
+            db.create_all()  # Skapar tabellerna om de inte finns
+
         talisman.force_https = False
 
     @classmethod
@@ -54,7 +61,6 @@ class TestAccountService(TestCase):
     ######################################################################
     #  H E L P E R   M E T H O D S
     ######################################################################
-
     def _create_accounts(self, count):
         """Factory method to create accounts in bulk"""
         accounts = []
@@ -74,7 +80,6 @@ class TestAccountService(TestCase):
     ######################################################################
     #  A C C O U N T   T E S T   C A S E S
     ######################################################################
-
     def test_index(self):
         """It should get 200_OK from the Home Page"""
         response = self.client.get("/")
@@ -89,22 +94,22 @@ class TestAccountService(TestCase):
 
     def test_security_headers(self):
         """It should return security headers"""
-        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
+        response = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         headers = {
-            'X-Frame-Options': 'SAMEORIGIN',
-            'X-Content-Type-Options': 'nosniff',
-            'Content-Security-Policy': "default-src 'self'; object-src 'none'",
-            'Referrer-Policy': 'strict-origin-when-cross-origin'
+            "X-Frame-Options": "SAMEORIGIN",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "default-src 'self'; object-src 'none'",
+            "Referrer-Policy": "strict-origin-when-cross-origin",
         }
         for key, value in headers.items():
             self.assertEqual(response.headers.get(key), value)
 
     def test_cors_security(self):
         """It should return a CORS header"""
-        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
+        response = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
+        self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")
 
     def test_create_account(self):
         """It should Create a new Account"""
@@ -166,9 +171,7 @@ class TestAccountService(TestCase):
         """It should not Create an Account when sending the wrong media type"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="text/html"
+            BASE_URL, json=account.serialize(), content_type="text/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
@@ -188,17 +191,25 @@ class TestAccountService(TestCase):
         result = runner.invoke(args=["db-create"])
         self.assertEqual(result.exit_code, 0)
 
+    def test_db_create_command(self):
+        """It should call the db-create CLI command"""
+        runner = app.test_cli_runner()
+        result = runner.invoke(args=["db-create"])
+        self.assertEqual(result.exit_code, 0)
+
     def test_deserialize_account_error(self):
         """It should not deserialize an empty account"""
         account = Account()
         # Vi importerar DataValidationError inuti testet för att nå den
         from service.models import DataValidationError
+
         self.assertRaises(DataValidationError, account.deserialize, None)
 
     def test_deserialize_account_bad_data(self):
         """It should not deserialize bad data"""
         account = Account()
         from service.models import DataValidationError
+
         bad_data = "this is not a dictionary"
         self.assertRaises(DataValidationError, account.deserialize, bad_data)
 

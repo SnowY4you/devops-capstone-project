@@ -110,3 +110,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+/oc.exe

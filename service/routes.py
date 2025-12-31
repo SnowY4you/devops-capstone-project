@@ -6,14 +6,15 @@ This microservice handles the lifecycle of Accounts
 
 # pylint: disable=unused-import
 from flask import jsonify, request, make_response, abort, url_for  # noqa; F401
-from service.models import Account
 from service.common import status  # HTTP Status Codes
-from . import app, talisman
-
+from service.models import Account
+from . import app
 
 ############################################################
 # Health Endpoint
 ############################################################
+
+
 @app.route("/health")
 def health():
     """Health Status"""
@@ -23,6 +24,8 @@ def health():
 ######################################################################
 # GET INDEX
 ######################################################################
+
+
 @app.route("/")
 def index():
     """Root URL response"""
@@ -39,6 +42,8 @@ def index():
 ######################################################################
 # CREATE A NEW ACCOUNT
 ######################################################################
+
+
 @app.route("/accounts", methods=["POST"])
 def create_accounts():
     """
