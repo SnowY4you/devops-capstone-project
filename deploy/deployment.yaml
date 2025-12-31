@@ -1,4 +1,3 @@
-# Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,25 +15,30 @@ spec:
         app: accounts
     spec:
       containers:
-      - name: accounts
-        image: accounts:latest  # Detta ändras till din IBM Registry-sökväg i molnet
-        ports:
-        - containerPort: 8080
-        env:
-        - name: DATABASE_HOST
-          value: postgresql
-        - name: DATABASE_NAME
-          valueFrom:
-            secretKeyRef:
-              name: postgresql
-              key: database-name
-        - name: DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgresql
-              key: database-user
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgresql
-              key: database-password
+        - name: accounts
+          image: us.icr.io/sn-labs-svanbuggenum/accounts:1
+          ports:
+            - containerPort: 8080
+          env:
+            # Denna används av SQLAlchemy i din config.py
+            - name: DATABASE_URI
+              value: "postgresql://postgres:IBM_1337@postgresql:5432/testdb"
+            - name: FLASK_APP
+              value: "service:app"
+            - name: DATABASE_HOST
+              value: postgresql
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-name
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-password
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-user
