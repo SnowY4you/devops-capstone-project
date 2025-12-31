@@ -6,7 +6,7 @@ type: Opaque
 stringData:
   database-name: testdb
   database-user: postgres
-  database-password: IBM@1337
+  database-password: IBM_1337
 ---
 apiVersion: v1
 kind: Service
