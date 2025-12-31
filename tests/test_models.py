@@ -10,12 +10,15 @@ from service import app
 from service.models import Account, DataValidationError, db
 from tests.factories import AccountFactory
 
+
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 ######################################################################
 #  Account   M O D E L   T E S T   C A S E S
 ######################################################################
+
+
 class TestAccount(unittest.TestCase):
     """Test Cases for Account Model"""
 
@@ -157,16 +160,6 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(new_account.address, account.address)
         self.assertEqual(new_account.phone_number, account.phone_number)
         self.assertEqual(new_account.date_joined, account.date_joined)
-
-    def test_deserialize_with_key_error(self):
-        """It should not Deserialize an account with a KeyError"""
-        account = Account()
-        self.assertRaises(DataValidationError, account.deserialize, {})
-
-    def test_deserialize_with_type_error(self):
-        """It should not Deserialize an account with a TypeError"""
-        account = Account()
-        self.assertRaises(DataValidationError, account.deserialize, [])
 
     def test_deserialize_with_key_error(self):
         """It should not deserialize an account with missing data"""

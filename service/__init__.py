@@ -3,6 +3,7 @@ Package: service
 Fullt dokumenterat paket för kontotjänsten (Account Service).
 Detta paket innehåller Flask-applikationen och databasinitieringen.
 """
+
 import sys
 from flask import Flask
 from flask_talisman import Talisman
@@ -37,6 +38,7 @@ except Exception as error:  # pylint: disable=broad-except
 # pylint: disable=wrong-import-position
 from service import routes, models  # noqa: F401 E402
 from service.common import error_handlers, cli_commands  # noqa: F401 E402
+
 # pylint: enable=wrong-import-position
 
 app.logger.info("Service initialized!")

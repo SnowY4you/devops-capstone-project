@@ -7,6 +7,7 @@ import factory
 from factory.fuzzy import FuzzyDate
 from service.models import Account
 
+
 class AccountFactory(factory.Factory):
     """Creates fake Accounts"""
 

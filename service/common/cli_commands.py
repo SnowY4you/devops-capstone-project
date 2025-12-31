@@ -1,6 +1,7 @@
 """
 Flask CLI Command Extensions
 """
+
 from service import app
 from service.models import db
 
@@ -9,6 +10,8 @@ from service.models import db
 # Usage:
 #   flask db-create
 ######################################################################
+
+
 @app.cli.command("db-create")
 def db_create():
     """
