@@ -3,7 +3,6 @@ import os
 from importlib import reload
 import service.config as config
 
-
 class TestConfig(unittest.TestCase):
     """Testfall för att täcka konfigurationslogik"""
 

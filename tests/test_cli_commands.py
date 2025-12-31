@@ -7,8 +7,6 @@ from unittest import TestCase
 from unittest.mock import patch, MagicMock
 from click.testing import CliRunner
 from service.common.cli_commands import db_create
-
-
 class TestFlaskCLI(TestCase):
     """Test Flask CLI Commands"""
 

@@ -1,10 +1,8 @@
 """
 Flask CLI Command Extensions
 """
-
 from service import app
 from service.models import db
-
 
 ######################################################################
 # Command to force tables to be rebuilt

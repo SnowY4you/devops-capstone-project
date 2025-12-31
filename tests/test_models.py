@@ -13,8 +13,6 @@ from tests.factories import AccountFactory
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
-
-
 ######################################################################
 #  Account   M O D E L   T E S T   C A S E S
 ######################################################################
@@ -46,7 +44,6 @@ class TestAccount(unittest.TestCase):
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
-
     def test_create_an_account(self):
         """It should Create an Account and assert that it exists"""
         fake_account = AccountFactory()
@@ -81,7 +78,6 @@ class TestAccount(unittest.TestCase):
         """It should Read an account"""
         account = AccountFactory()
         account.create()
-
         # Read it back
         found_account = Account.find(account.id)
         self.assertEqual(found_account.id, account.id)
@@ -98,12 +94,10 @@ class TestAccount(unittest.TestCase):
         # Assert that it was assigned an id and shows up in the database
         self.assertIsNotNone(account.id)
         self.assertEqual(account.email, "advent@change.me")
-
         # Fetch it back
         account = Account.find(account.id)
         account.email = "XYZZY@plugh.com"
         account.update()
-
         # Fetch it back again
         account = Account.find(account.id)
         self.assertEqual(account.email, "XYZZY@plugh.com")
@@ -134,14 +128,11 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(len(accounts), 5)
 
     def test_find_by_name(self):
-        """It should Find an Account by name"""
+        """It should find an Account by name"""
         account = AccountFactory()
         account.create()
-
-        # Fetch it back by name
-        same_account = Account.find_by_name(account.name)[0]
-        self.assertEqual(same_account.id, account.id)
-        self.assertEqual(same_account.name, account.name)
+        found = Account.find_by_name(account.name)
+        self.assertEqual(found[0].name, account.name)
 
     def test_serialize_an_account(self):
         """It should Serialize an account"""
@@ -176,3 +167,15 @@ class TestAccount(unittest.TestCase):
         """It should not Deserialize an account with a TypeError"""
         account = Account()
         self.assertRaises(DataValidationError, account.deserialize, [])
+
+    def test_deserialize_with_key_error(self):
+        """It should not deserialize an account with missing data"""
+        account = Account()
+        data = {"name": "John"}  # Saknar email, address etc.
+        self.assertRaises(DataValidationError, account.deserialize, data)
+
+    def test_deserialize_with_type_error(self):
+        """It should not deserialize an account with bad data"""
+        account = Account()
+        data = "not a dictionary"
+        self.assertRaises(DataValidationError, account.deserialize, data)

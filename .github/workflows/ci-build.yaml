@@ -19,7 +19,7 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_PASSWORD: pgs3cr3t
+          POSTGRES_PASSWORD: IBM@1337
           POSTGRES_DB: testdb
         options: >-
           --health-cmd pg_isready

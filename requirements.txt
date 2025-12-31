@@ -1,18 +1,18 @@
 # Pin dependancies that might cause breakage
 # Updated with lesser vulnerabile versions
 Werkzeug==3.1.4
-SQLAlchemy==1.4.46
+SQLAlchemy==2.0.45
 
 # Build dependencies
-Flask==2.2.5
-Flask-SQLAlchemy==2.5.1
+Flask==3.1.2
+Flask-SQLAlchemy==3.1.1
 psycopg2-binary==2.9.3
 python-dotenv==0.20.0
 flask-talisman==1.1.0
 flask-cors==6.0.2
 
 # Runtime dependencies
-gunicorn==22.0.0
+gunicorn==23.0.0
 honcho==1.1.0
 
 # Code quality
