@@ -24,12 +24,17 @@ class TestAccount(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """This runs once before the entire test suite"""
+        """Run once before all tests"""
         app.config["TESTING"] = True
         app.config["DEBUG"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
-        Account.init_db(app)
+        # Vi behöver inte anropa Account.init_db(app) här
+        # eftersom appen redan är initierad.
+        # Om du absolut vill säkerställa tabellerna:
+        from service.models import db
+        with app.app_context():
+            db.create_all()
 
     @classmethod
     def tearDownClass(cls):
