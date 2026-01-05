@@ -16,31 +16,30 @@ spec:
         app: accounts
     spec:
       containers:
-      - image: us.icr.io/sn-labs-svanbuggenum/accounts:1
-        name: accounts
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        resources: {}
-
-        env:
-          # Env vars needed for accesing postgres database.
-          # 'oc describe secret <...>' used to get data / key names.
-          - name: DATABASE_HOST
-            value: postgresql
-          - name: DATABASE_NAME
-            valueFrom:
-              secretKeyRef:
-                name: postgresql
-                key: database-name
-          - name: DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgresql
-                key: database-password
-          - name: DATABASE_USER
-            valueFrom:
-              secretKeyRef:
-                name: postgresql
-                key: database-user
-status: {}
+        - name: accounts
+          image: us.icr.io/sn-labs-svanbuggenum/accounts:latest
+          ports:
+            - containerPort: 8080
+          env:
+            # Denna används av SQLAlchemy i din config.py
+            - name: DATABASE_URI
+              value: "postgresql://postgres:IBM_1337@postgresql:5432/testdb"
+            - name: FLASK_APP
+              value: "service:app"
+            - name: DATABASE_HOST
+              value: postgresql
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-name
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-password
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-user
