@@ -1,13 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: accounts
+  creationTimestamp: null
   labels:
     app: accounts
+  name: accounts
 spec:
-  type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: 8080
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
   selector:
     app: accounts
+  type: ClusterIP
+status:
+  loadBalancer: {}
